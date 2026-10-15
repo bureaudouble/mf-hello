@@ -17,7 +17,7 @@ Deno.serve({ port: Number(env("PORT") || 8000) }, async (req) => {
   switch (url.pathname) {
     case "/":
       return new Response(
-        `hello ${env("GREETING") || "world"} from ${env("MF_APP")} revision ${env("MF_REV")}\n`,
+        `hello ${env("GREETING") || "world"} (preview branch) from ${env("MF_APP")} revision ${env("MF_REV")}\n`,
         { headers: { "content-type": "text/plain" } },
       );
     case "/health":
