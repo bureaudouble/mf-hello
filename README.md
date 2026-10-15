@@ -13,3 +13,5 @@ something the dashboard shows:
 | `/memory?mib=32` | holds memory (`&free` lets it go)                                                      |
 
 Push a branch to get a preview: `hello-<rev>.apps.elias.systems`.
+
+The second revision: its build carries `BUILD_LABEL`.
