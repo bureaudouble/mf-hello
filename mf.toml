@@ -1,0 +1,16 @@
+# hello: the test app of the apps.elias.systems fleet (mf.toml, Amendment 15).
+app = "hello"
+
+[build]
+image   = "docker.io/denoland/deno:debian-2.9.7@sha256:fa335acdf6b72106eda2cb6a8cb5f4187e7630e357467489db4b2e7352d5e432"
+# The image's DENO_DIR (/deno-dir/) is not writable by the build user, so the cache sits under HOME.
+command = "export DENO_DIR=$HOME/.cache/deno && deno run -A build.ts && deno compile --no-check --allow-all --output dist/server main.ts"
+output  = "dist"
+cache   = ["/home/build/.cache/deno"]
+
+[run]
+command = ["./server"]
+
+[runtime]
+memory_mib   = 128
+idle_minutes = 5

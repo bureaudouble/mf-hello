@@ -3,6 +3,12 @@
 import build from "./build_info.ts";
 
 const env = (k: string) => Deno.env.get(k) ?? "";
+// mf names the unit through OpenTelemetry's standard identity: the app id and its revision.
+const identity = Object.fromEntries(
+  env("OTEL_RESOURCE_ATTRIBUTES").split(",").map((kv) => kv.split("=") as [string, string]),
+);
+const app = env("OTEL_SERVICE_NAME");
+const rev = identity["mf.rev"] ?? "";
 const started = new Date().toISOString();
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body, null, 2) + "\n", {
@@ -17,17 +23,17 @@ Deno.serve({ port: Number(env("PORT") || 8000) }, async (req) => {
   switch (url.pathname) {
     case "/":
       return new Response(
-        `hello ${env("GREETING") || "world"} from ${env("MF_APP")} revision ${env("MF_REV")}\n`,
+        `hello ${env("GREETING") || "world"} from ${app} revision ${rev}\n`,
         { headers: { "content-type": "text/plain" } },
       );
     case "/health":
       return new Response("ok\n");
     case "/info":
       return json({
-        app: env("MF_APP"),
-        rev: env("MF_REV"),
-        url: env("MF_URL"),
-        domain: env("MF_DOMAIN"),
+        app,
+        rev,
+        context: identity["mf.context"] ?? "",
+        host: url.host,
         started,
         build,
         greeting: env("GREETING"),

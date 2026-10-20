@@ -1,8 +1,3 @@
 {
-  "deploy": {
-    "app": "hello",
-    "build": "deno run -A build.ts",
-    "entrypoint": "main.ts"
-  },
-  "mf": { "fleet": "apps.elias.systems", "memory-mib": 128, "idle-minutes": 5, "health": "/health" }
+  "tasks": { "dev": "deno run -A --watch main.ts" }
 }
